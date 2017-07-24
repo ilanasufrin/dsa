@@ -4,6 +4,8 @@
 Basic TreeNode and BinarySearch Tree from http://interactivepython.org/runestone/static/pythonds/Trees/SearchTreeImplementation.html
 Modified to have Red-Black Tree constraints. 
 
+Note that this tree has keys AND values but I'm primarily interested in the keys so I'm only printing those
+
 """
 
 from collections import deque
@@ -171,6 +173,9 @@ class BinarySearchTree:
           current = current.leftChild
       return current
 
+    def findRoot(self):
+      return self.root
+
     def remove(self,currentNode):
          if currentNode.isLeaf(): #leaf
            if currentNode == currentNode.parent.leftChild:
@@ -210,5 +215,38 @@ class BinarySearchTree:
                                     currentNode.rightChild.rightChild)
 
     
-  
+    def traverse_breadth(self, root):
+      q = deque()
+      q.append(root)
+      while len(q) > 0:
+          n = q.popleft()
+          print(n.key)
+          if n.leftChild is not None:
+            q.append(n.leftChild)
+          if n.rightChild is not None:
+            q.append(n.rightChild)
+
+    def print_levels(self, rootnode):
+      thislevel = [rootnode]
+      while thislevel:
+        nextlevel = list()
+        for n in thislevel:
+          print n.key,
+          if n.leftChild: nextlevel.append(n.leftChild)
+          if n.rightChild: nextlevel.append(n.rightChild)
+        print #begins a new line
+        thislevel = nextlevel
+
+tree = BinarySearchTree()
+tree.put(6, 6)
+tree.put(5, 5)
+tree.put(8, 8)
+tree.put(1, 1)
+tree.put(0, 0)
+tree.put(10, 10)
+tree.put(7, 7)
+tree.put(-1, -1)
+root = tree.findRoot()
+tree.print_levels(root)
+
 
