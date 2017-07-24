@@ -4,19 +4,30 @@
 Basic TreeNode and BinarySearch Tree from http://interactivepython.org/runestone/static/pythonds/Trees/SearchTreeImplementation.html
 Modified to have Red-Black Tree constraints. 
 
-Note that this tree has keys AND values but I'm primarily interested in the keys so I'm only printing those
+Note that this tree has keys AND values but I'm primarily interested in the keys so I'm only printing those.
+
+The height of a red-black tree is never bigger than 
+2*log_2(n+1). This is achived with these properties: 
+    RB1) Every node is either red or black. 
+    RB2) The root is black. 
+    RB3) Every leaf is black. 
+    RB4) Every child of a red node is black. 
+    RB5) For every node: The number of black nodes in all paths 
+       to leafs is equal. 
 
 """
 
 from collections import deque
+import sys
 
 class TreeNode:
-    def __init__(self,key,val,left=None,right=None,parent=None):
+    def __init__(self,key,val,left=None,right=None,parent=None, red=False):
         self.key = key
         self.payload = val
         self.leftChild = left
         self.rightChild = right
         self.parent = parent
+        self.red = red
 
     def hasLeftChild(self):
         return self.leftChild
@@ -53,7 +64,7 @@ class TreeNode:
             self.rightChild.parent = self
 
 
-class BinarySearchTree:
+class RBTree:
 
     def __init__(self):
         self.root = None
@@ -69,20 +80,21 @@ class BinarySearchTree:
         if self.root:
             self._put(key,val,self.root)
         else:
-            self.root = TreeNode(key,val)
-        self.size = self.size + 1
+            self.root = TreeNode(key,val, red=False) #rule 2, the root is black
+        self.size = self.size + 1 
 
     def _put(self,key,val,currentNode):
         if key < currentNode.key:
             if currentNode.hasLeftChild():
                    self._put(key,val,currentNode.leftChild)
             else:
-                   currentNode.leftChild = TreeNode(key,val,parent=currentNode)
+                   currentNode.leftChild = TreeNode(key,val,parent=currentNode, red=True)
         else:
             if currentNode.hasRightChild():
                    self._put(key,val,currentNode.rightChild)
             else:
-                   currentNode.rightChild = TreeNode(key,val,parent=currentNode)
+                   currentNode.rightChild = TreeNode(key,val,parent=currentNode, red=True)
+        #TODO call insert_fixup here
 
     def __setitem__(self,k,v):
        self.put(k,v)
@@ -237,7 +249,16 @@ class BinarySearchTree:
         print #begins a new line
         thislevel = nextlevel
 
-tree = BinarySearchTree()
+
+    def check_binary_search_tree(self, root):
+      return self.check_bst_helper(root, -sys.maxsize, sys.maxsize);
+
+    def check_bst_helper(self, root, currLow, currHigh):
+      if root is None:
+          return True
+      return (root.key > currLow) and (root.key < currHigh) and (self.check_bst_helper(root.leftChild, currLow, root.key)) and (self.check_bst_helper(root.rightChild, root.key, currHigh))
+
+tree = RBTree()
 tree.put(6, 6)
 tree.put(5, 5)
 tree.put(8, 8)
@@ -248,5 +269,9 @@ tree.put(7, 7)
 tree.put(-1, -1)
 root = tree.findRoot()
 tree.print_levels(root)
+if tree.check_binary_search_tree(root) is True:
+  print("Valid BST")
+else:
+  print("NOT a valid BST")
 
 
