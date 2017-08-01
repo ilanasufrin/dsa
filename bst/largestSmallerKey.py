@@ -21,7 +21,7 @@ class BinarySearchTree:
   def find_largest_smaller_key(self, num):
     return self.helper(self.root, num)
     
-  def helper(self, node, num, bestSoFar=-1):
+  def helper(self, node, num, bestSoFar=None):
     if node is None:
       # print bestSoFar
       return bestSoFar
