@@ -12,6 +12,8 @@ class PriorityQueue():
 
     """Push item onto heap, maintaining the heap invariant afterwards."""
     def push(self, item):
+        if type(item) != tuple or type(item[1]) != int:
+            raise ValueError('Item to insert must be a tuple of (data, int(priority))')
         self.queue.append(item)
         self.fixup_queue(0, len(self.queue)-1)
 
@@ -26,14 +28,22 @@ class PriorityQueue():
         # Follow the path to the root, moving parents down until finding a place
         # newitem fits.
         while pos > startpos:
-            parentpos = (pos - 1) >> 1
+            # parentpos = (pos - 1) >> 1
+            parentpos = (pos - 1) // 2
             parent = self.queue[parentpos]
+            print("comparing newitem " + str(newitem[1]) + " to olditem " + str(parent[1]))
             if newitem[1] < parent[1]:
+                print("newitem " + str(newitem[1]) + " is less than olditem " + str(parent[1]))
                 self.queue[pos] = parent
                 pos = parentpos
                 continue
+            print("newitem " + str(newitem[1]) + " is greater than olditem " + str(parent[1]) + " so will insert it here at " + str(pos))
             break
+        print("gonna insert " + str(newitem[1]) + " at position " + str(pos))
+
         self.queue[pos] = newitem
+        # print("queue is now: ")
+        # self.print_queue()
 
     def print_queue(self):
         for item in self.queue:
@@ -41,12 +51,15 @@ class PriorityQueue():
 
     def peek(self):
         if len(self.queue) < 1:
-            raise IndexError('There is nothing in the queue')
+            raise IndexError('Cannot peek() because there is nothing in the queue')
         return self.queue[0]
 
 p = PriorityQueue()
 
-p.push(('test', 4))
-p.push(('test1', 3))
+
+p.push(('three', 3))
+p.push(('four', 4))
+p.push(('zero', 0))
+
 p.print_queue()
-print(p.peek())
+# print(p.peek())
