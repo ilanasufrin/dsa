@@ -9,8 +9,7 @@ class Solution(object):
         """
         :type n: int
         :rtype: int
-        """
-        """
+
         #we are looking for the number of permutations
         - If we are on the 0th stair, there are no ways
         - If we are on the n - 1 stair, there is 1 way: 1
@@ -20,7 +19,7 @@ class Solution(object):
         return self.helper(n, {})
 
     """
-    This helper function is exactly the same as climbStairs(n) but it includes a memoization array
+    This helper is just a way to call climbStairs(n) with a memoization array
     """
     def helper(self, n, memo):
         
@@ -29,12 +28,8 @@ class Solution(object):
             return memo[n]
 
         #base cases
-        if n <= 0:
-            return 0
-        if n == 1:
-            return 1
-        if n == 2:
-            return 2
+        if n <=2:
+            return n
 
         #backtracking
         result = self.helper(n-1, memo) + self.helper(n-2, memo)
