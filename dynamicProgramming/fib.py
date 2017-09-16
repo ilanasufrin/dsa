@@ -6,7 +6,8 @@ class Fib:
     Start of the fibonacci sequence, for sanity check: 1,1,2,3,5,8,13,21
 
     Memory complexity: O(n), which comes from the dictionary used to hold a unique value answer for each key value of n
-    Runtime complexity: O(n) because we're doing that many recursive calls and O(1) work in each call - TODO clear with @DanielHabib
+    Runtime complexity: O(n) because we're doing that many recursive calls and O(1) work in each call
+                        - # of subproblems · time/subproblem
     """
     def calc_fib(self, n, memo):
         if memo is None:
