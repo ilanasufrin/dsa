@@ -1,6 +1,7 @@
 """
 You are given coins of different denominations "coins" and a total amount of money amount "m". 
-Write a function to compute the MINIMUM number of coins you need to make "m", given the coins in "coins"
+Write a function to compute the MINIMUM number of coins you need to make "m", given the coins in "coins".
+If that amount of money cannot be made up by any combination of the coins, return -1.
 
 
 Axioms:
@@ -14,7 +15,7 @@ Is this a combination or permutation problem?
 Input:
 - List coins
 - Int m
-- Dict memo
+- List memo
 
 Return:
 - Int minCoins
@@ -28,28 +29,42 @@ Space with cache:
 The size of the cache, or m*len(coins)
 
 """
-import sys
-def min_change(coins, m, memo={}):
-    #Read from the cache
-    if m in memo:
-        return memo[m]
+import sys    
+def make_min_coins(coins, amount, memo=None):
+    #A list is faster than using a dict
+    if memo is None:
+        memo = [None] * (amount+1)
     
-    #Base cases
-    if m in coins:
+    #Read cache
+    if memo[amount] !=None:
+        if memo[amount] == sys.maxint:
+            return -1
+        else:
+            return memo[amount]
+    
+    #Base case
+    if amount in coins:
         return 1
-
-    #Backtracking
-    minCoins = sys.maxint
-
+    
+    if amount <= 0:
+        return 0
+    
+    #Backtrack
+    min_coins = sys.maxint
+    
     for coin in coins:
-        if coin <= m:
-            minCoins = min(minCoins, 1+min_change(coins,m-coin, memo))
+        if coin <= amount:
+            candidate = 1 + make_min_coins(coins,amount-coin,memo)
+            if candidate > 0:  
+                min_coins = min(min_coins, candidate)
 
-    #Populate the cache
-    memo[m] = minCoins
+    #Write to cache
+    memo[amount] = min_coins
 
-    return minCoins
+    if min_coins == sys.maxint:
+        return -1
+
+    return min_coins
 
 if __name__ == '__main__':
-    print(min_change([1,5,10,25], 63, {}))
-
+    print(make_min_coins([84,457,478,309,350,349,422,469,100,432,188], 6993))
