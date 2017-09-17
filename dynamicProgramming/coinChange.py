@@ -14,9 +14,10 @@ Is this a combination or permutation problem?
 Input:
 - List coins
 - Int m
+- Dict memp
 
 Return:
-- Int m
+- Int num_ways
 
 Runtime: 
 How many levels? m * len(coins) 
